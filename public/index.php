@@ -74,10 +74,10 @@ require_once '../includes/db_connect.php';
         <a href="index.php" class="logo">SnapBroker.</a>
         <div>
             <?php if (isset($_SESSION['client_id'])): ?>
-                <a href="../client/index.php" class="btn" style="margin-right: 0.5rem; color: var(--primary); font-weight: 600;">My Profile</a>
+                <a href="../client/index.php" class="btn" style="margin-right: 0.5rem; color: var(--primary); font-weight: 600;"><?php echo htmlspecialchars($_SESSION['client_name']); ?>'s Profile</a>
                 <a href="../client/logout.php" class="btn btn-primary" style="background: var(--danger); border-color: var(--danger);">Logout</a>
             <?php elseif (isset($_SESSION['user_id'])): ?>
-                <a href="../dashboard/index.php" class="btn" style="margin-right: 0.5rem; color: var(--primary); font-weight: 600;">Studio Dashboard</a>
+                <a href="../dashboard/index.php" class="btn" style="margin-right: 0.5rem; color: var(--primary); font-weight: 600;"><?php echo htmlspecialchars($_SESSION['brand_name']); ?></a>
                 <a href="../dashboard/logout.php" class="btn btn-primary" style="background: var(--danger); border-color: var(--danger);">Logout</a>
             <?php else: ?>
                 <a href="../client/login.php" class="btn" style="margin-right: 0.5rem; color: var(--primary); font-weight: 600;">Client Login</a>

@@ -142,10 +142,16 @@ $shoot_count = $stmt->fetchColumn();
             <p style="color: var(--gray); font-size: 0.85rem;">Check availability and packages instantly via WhatsApp.
             </p>
         </div>
-        <a href="<?php echo generateWhatsAppLink($pro['email'], "Hi {$pro['brand_name']}, I found your portfolio on SnapBroker and would like to inquire about your availability."); ?>" target="_blank" class="btn btn-primary"
-            style="display: flex; align-items: center; justify-content: center;">
-            Chat on WhatsApp
-        </a>
+        <div style="display: flex; gap: 1rem;">
+            <a href="../client/book.php?pro_id=<?php echo $pro['id']; ?>" class="btn btn-primary"
+                style="display: flex; align-items: center; justify-content: center; background: var(--dark); border-color: var(--dark);">
+                Send Booking Request
+            </a>
+            <a href="<?php echo generateWhatsAppLink($pro['email'], "Hi {$pro['brand_name']}, I found your portfolio on SnapBroker and would like to inquire about your availability."); ?>" target="_blank" class="btn btn-primary"
+                style="display: flex; align-items: center; justify-content: center;">
+                Chat on WhatsApp
+            </a>
+        </div>
     </div>
 
     <footer style="text-align: center; padding: 5rem 0; color: #cbd5e1; font-size: 0.85rem;">
