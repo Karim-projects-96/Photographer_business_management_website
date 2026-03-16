@@ -1,5 +1,8 @@
 <?php
 // Main Landing Page for SnapBroker Marketplace
+ini_set('session.cookie_lifetime', 60 * 60 * 24 * 30);
+ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 30);
+session_start();
 require_once '../includes/db_connect.php';
 ?>
 <!DOCTYPE html>
@@ -70,8 +73,17 @@ require_once '../includes/db_connect.php';
     <nav class="navbar">
         <a href="index.php" class="logo">SnapBroker.</a>
         <div>
-            <a href="../dashboard/login.php" class="btn">Photographer Login</a>
-            <a href="../dashboard/register.php" class="btn btn-primary">Join as Pro</a>
+            <?php if (isset($_SESSION['client_id'])): ?>
+                <a href="../client/index.php" class="btn" style="margin-right: 0.5rem; color: var(--primary); font-weight: 600;">My Profile</a>
+                <a href="../client/logout.php" class="btn btn-primary" style="background: var(--danger); border-color: var(--danger);">Logout</a>
+            <?php elseif (isset($_SESSION['user_id'])): ?>
+                <a href="../dashboard/index.php" class="btn" style="margin-right: 0.5rem; color: var(--primary); font-weight: 600;">Studio Dashboard</a>
+                <a href="../dashboard/logout.php" class="btn btn-primary" style="background: var(--danger); border-color: var(--danger);">Logout</a>
+            <?php else: ?>
+                <a href="../client/login.php" class="btn" style="margin-right: 0.5rem; color: var(--primary); font-weight: 600;">Client Login</a>
+                <a href="../dashboard/login.php" class="btn">Photographer Login</a>
+                <a href="../dashboard/register.php" class="btn btn-primary">Join as Pro</a>
+            <?php endif; ?>
         </div>
     </nav>
 

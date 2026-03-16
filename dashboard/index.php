@@ -1,5 +1,7 @@
 <?php
 // dashboard/index.php
+ini_set('session.cookie_lifetime', 60 * 60 * 24 * 30);
+ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 30);
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -139,7 +141,8 @@ $recent_projects = $stmt->fetchAll();
                 <a href="projects.php" class="nav-link">My Projects</a>
                 <a href="finance.php" class="nav-link">Financials</a>
                 <a href="portfolio.php" class="nav-link">Public Profile</a>
-                <a href="logout.php" class="nav-link" style="margin-top: 5rem; color: var(--danger);">Logout</a>
+                <a href="../public/index.php" class="nav-link" style="margin-top: 5rem; color: #38bdf8;">← Back to Home screen</a>
+                <a href="logout.php" class="nav-link" style="color: var(--danger);">Logout</a>
             </nav>
         </aside>
 

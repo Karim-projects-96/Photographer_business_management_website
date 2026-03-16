@@ -1,5 +1,7 @@
 <?php
 // dashboard/new-project.php
+ini_set('session.cookie_lifetime', 60 * 60 * 24 * 30);
+ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 30);
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -73,6 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body style="background: #f1f5f9;">
 
     <div class="form-panel">
+        <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between;">
+            <a href="projects.php" style="color: var(--gray); text-decoration: none; font-weight: 600;">← Back to Projects</a>
+            <a href="../public/index.php" style="color: var(--primary); text-decoration: none; font-weight: 600;">Back to Home screen →</a>
+        </div>
         <h2 style="margin-bottom: 2rem;">Create <span class="text-gradient">New Assignment</span></h2>
 
         <?php if ($message): ?>

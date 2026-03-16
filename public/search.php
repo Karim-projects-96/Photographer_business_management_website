@@ -97,7 +97,7 @@ $photographers = $stmt->fetchAll();
                 <?php echo count($photographers); ?> Professionals matching your criteria found.
             </p>
         </div>
-        <a href="index.php" class="btn btn-primary">Go Back</a>
+        <a href="index.php" class="btn btn-primary">Back to Home screen</a>
     </header>
 
     <div class="results-grid">

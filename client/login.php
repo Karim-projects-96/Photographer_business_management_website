@@ -1,5 +1,5 @@
 <?php
-// dashboard/login.php
+// client/login.php
 ini_set('session.cookie_lifetime', 60 * 60 * 24 * 30);
 ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 30);
 session_start();
@@ -8,17 +8,18 @@ require_once '../includes/db_connect.php';
 $message = isset($_GET['msg']) ? $_GET['msg'] : "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'];
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt = $pdo->prepare("SELECT * FROM clients WHERE email = ?");
     $stmt->execute([$email]);
-    $user = $stmt->fetch();
+    $client = $stmt->fetch();
 
-    if ($user && password_verify($password, $user['password_hash'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['brand_name'] = $user['brand_name'];
-        header("Location: index.php");
+    if ($client && password_verify($password, $client['password_hash'])) {
+        $_SESSION['client_id'] = $client['id'];
+        $_SESSION['client_name'] = $client['full_name'];
+        $_SESSION['client_phone'] = $client['phone'];
+        header("Location: ../public/index.php");
         exit();
     } else {
         $message = "Invalid email or password.";
@@ -31,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <head>
     <meta charset="UTF-8">
-    <title>Pro Login | SnapBroker</title>
+    <title>Client Login | SnapBroker</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <style>
         body {
-            background: radial-gradient(circle at top right, #f8fafc 0%, #e2e8f0 100%);
+            background: radial-gradient(circle at top left, #f1f5f9 0%, #cbd5e1 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -80,29 +81,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div style="margin-bottom: 1.5rem;">
             <a href="../public/index.php" style="color: var(--primary); text-decoration: none; font-weight: 600;">← Back to Home screen</a>
         </div>
-        <h2 style="margin-bottom: 0.5rem;">Welcome <span class="text-gradient">Back</span></h2>
-        <p style="color: var(--gray); margin-bottom: 2rem;">Access your studio dashboard.</p>
+        <h2 style="margin-bottom: 0.5rem;">Client <span class="text-gradient">Login</span></h2>
+        <p style="color: var(--gray); margin-bottom: 2rem;">Access your booking details and deliverables.</p>
 
         <?php if ($message): ?>
             <p
                 style="color: var(--primary); margin-bottom: 1rem; background: #e0e7ff55; padding: 0.5rem; border-radius: 4px;">
-                <?php echo $message; ?>
+                <?php echo htmlspecialchars($message); ?>
             </p>
         <?php endif; ?>
 
         <form method="POST">
             <div class="form-group">
                 <label>Email Address</label>
-                <input type="email" name="email" required placeholder="pro@example.com">
+                <input type="email" name="email" required placeholder="client@example.com">
             </div>
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" name="password" required>
             </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Sign In</button>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Log In</button>
             <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
-                New photographer? <a href="register.php" style="color: var(--primary); font-weight:600;">Join for
-                    free</a>
+                New client? <a href="register.php" style="color: var(--primary); font-weight:600;">Register Here</a>
             </p>
         </form>
     </div>

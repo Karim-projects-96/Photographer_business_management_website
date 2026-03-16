@@ -85,6 +85,9 @@ $shoot_count = $stmt->fetchColumn();
 <body style="background: #f8fafc;">
 
     <header class="profile-hero">
+        <div style="position: absolute; top: 1.5rem; left: 5%;">
+            <a href="index.php" style="color: #cbd5e1; text-decoration: none; font-weight: 600; font-size: 0.95rem;">← Back to Home screen</a>
+        </div>
         <img src="<?php echo $pro['profile_image_url'] ?: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'; ?>"
             class="profile-img">
         <h1 style="color: white; margin-bottom: 0.5rem;">

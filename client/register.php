@@ -1,27 +1,29 @@
 <?php
-// dashboard/register.php
+// client/register.php
+ini_set('session.cookie_lifetime', 60 * 60 * 24 * 30);
+ini_set('session.gc_maxlifetime', 60 * 60 * 24 * 30);
+session_start();
 require_once '../includes/db_connect.php';
 
 $message = "";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'];
+    $full_name = trim($_POST['full_name']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $full_name = $_POST['full_name'];
-    $brand_name = $_POST['brand_name'];
-    $city = $_POST['city'];
-    $category = $_POST['category'];
-
-    // Generate SEO Friendly Slug
-    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $brand_name)));
 
     try {
-        $stmt = $pdo->prepare("INSERT INTO users (email, password_hash, full_name, brand_name, slug, city, category) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$email, $password, $full_name, $brand_name, $slug, $city, $category]);
-        header("Location: login.php?msg=Registration successful! Please login.");
+        $stmt = $pdo->prepare("INSERT INTO clients (full_name, email, phone, password_hash) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$full_name, $email, $phone, $password]);
+        header("Location: login.php?msg=Registration successful! Please log in.");
         exit();
     } catch (PDOException $e) {
-        $message = "Error: Email or Studio Name already exists.";
+        if ($e->getCode() == 23000) {
+            $message = "Error: Email or Phone number already registered.";
+        } else {
+            $message = "An error occurred during registration. Please try again.";
+        }
     }
 }
 ?>
@@ -31,11 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <head>
     <meta charset="UTF-8">
-    <title>Join SnapBroker | Pro Registration</title>
+    <title>Client Registration | SnapBroker</title>
     <link rel="stylesheet" href="../assets/css/main.css">
     <style>
         body {
-            background: radial-gradient(circle at top right, #f8fafc 0%, #e2e8f0 100%);
+            background: radial-gradient(circle at top left, #f1f5f9 0%, #cbd5e1 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -59,8 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             font-size: 0.9rem;
         }
 
-        input,
-        select {
+        input {
             width: 100%;
             padding: 0.8rem;
             border-radius: 8px;
@@ -80,8 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div style="margin-bottom: 1.5rem;">
             <a href="../public/index.php" style="color: var(--primary); text-decoration: none; font-weight: 600;">← Back to Home screen</a>
         </div>
-        <h2 style="margin-bottom: 0.5rem;">Join as a <span class="text-gradient">Pro</span></h2>
-        <p style="color: var(--gray); margin-bottom: 2rem;">Start managing your photography business.</p>
+        <h2 style="margin-bottom: 0.5rem;">Join as a <span class="text-gradient">Client</span></h2>
+        <p style="color: var(--gray); margin-bottom: 2rem;">Track all your photography bookings easily.</p>
 
         <?php if ($message): ?>
             <p style="color: var(--danger); margin-bottom: 1rem;">
@@ -95,34 +96,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" name="full_name" required placeholder="John Doe">
             </div>
             <div class="form-group">
-                <label>Studio/Brand Name</label>
-                <input type="text" name="brand_name" required placeholder="Shutter Magic">
+                <label>Email Address</label>
+                <input type="email" name="email" required placeholder="client@example.com">
             </div>
             <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" name="email" required placeholder="pro@example.com">
+                <label>Phone Number</label>
+                <input type="text" name="phone" required placeholder="91-9876543210 (must match booking)">
+                <small style="color: var(--gray); font-size: 0.75rem;">Use the exact phone number provided to the photographer.</small>
             </div>
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" name="password" required>
             </div>
-            <div class="form-group">
-                <label>City</label>
-                <input type="text" name="city" required placeholder="Mumbai">
-            </div>
-            <div class="form-group">
-                <label>Primary Category</label>
-                <select name="category">
-                    <option value="Wedding">Wedding</option>
-                    <option value="Portraits">Portraits</option>
-                    <option value="Events">Events</option>
-                    <option value="Commercial">Commercial</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Create My
-                Portfolio</button>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Create My Account</button>
             <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
-                Already a member? <a href="login.php" style="color: var(--primary); font-weight:600;">Login Here</a>
+                Already have an account? <a href="login.php" style="color: var(--primary); font-weight:600;">Login Here</a>
             </p>
         </form>
     </div>
